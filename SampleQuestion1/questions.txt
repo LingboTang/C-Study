@@ -1,0 +1,48 @@
+1. Write a C++ program that prints "hello world" to stdout using C++ I/O functions.
+
+	Look at hello.cpp
+
+2. Why is it important to pick sufficiently big number types for your C++ applications?
+
+	Because we have to make sure variables have the right type to avoid underflows and overflows.
+	In C/C++, integer expressions are NOT checked for overflows/underflows!
+	Therefore, sufficiently big number types gives you more safe range of number operations.
+
+	For example: unsigned char foo = 255; //unsigned 8-bit value
+				 unsigned char bar = foo+1;
+				 // value of bar is 0 because of 2s-complement
+				 // number representation:
+				 // 255 (base 10) = 11111111 (base 2)
+				 //                +00000001
+				 //           = (1) 00000000 = 0 (base 10)
+
+	Floating-point overflows/underflows are indicated by special values (+Inf, -Inf, NaN).
+
+	But program continues anyway (even after say c= 1.0/0.0)
+
+3. Name two advantages of passing data by const reference.
+
+	(1) Using reference parameters, we can return more than one function value.
+	(2) If a certain function has a side-effect on its parameter x, this effect wouldn't be visible when applied to temporary objects because they are destroyed before the next expression is evaluated. By using const reference, we can solve this problem easily because now the reference become stable.
+	(3) Passing large read-only objects by value is wasteful: they are copied into local variables and not changed. If we use const reference, we can satisfy the same purpose with a lot faster speed.
+	(4) Address is passed to function, no copy overhead.
+		const ensures that the function body does not change the object. If it does, the compiler will issue an error message.
+	(5) Const qualifier protects read-only parameters.
+
+4. Why is operator new more convenient than malloc?
+	
+	Calling new with class type calls class constructor (later)
+	
+	No need to check return value against 0 -- if no memory is available an exception is thrown (later)
+
+	new/delete are fast and easier to use!
+	
+	Because new and delete are doing the same work as malloc and free plus they're calling constructors/destructors. I wouldn't expect there to be much of a difference, though, barring really slow constructors/destructors.
+
+	If you use them to allocate "plain old data", such that the constructor/destructor are trivial, they are unlikely to differ at all significantly in speed from malloc/free. It's possible (likely?) that you made a mistake somewhere in your measurements that biased the results. Really all they do aside from calling on to malloc/free is execute type's constructor/destructor (multiple times for arrays).
+
+5. Write C++ code using new/delete that first allocates an array of 100 doubles on the memory heap, initializes all values with 1.0, and then returns the memory to the operating system.
+
+
+	Look at dynamicArray.cpp
+
