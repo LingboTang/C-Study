@@ -1,0 +1,20 @@
+Methods (also called member functions)
+Automatic initialization, cleanup
+Access Restrictions
+Inheritance (public inheritance modeling is-a relationships)
+Multiple inheritance
+
+"Class = Data + Methods"
+
+Class inheritance, which allows new types to be constructed by inheriting attributes from other types, is a corner stone of OO programming, which helps maintaining
+large software projects.
+
+Note that the redundant struct prefix is no longer needed.
+
+Public: the data/method is accessible to all methods and the owner of the class variable
+
+Private: data/method is only accessible to methods but not to the object owner
+
+Protected: similar to private, used with class inheritance. Method of derived class have access, but the object owner does not. (We will discuss this in more detail later).
+
+Default is Private.
