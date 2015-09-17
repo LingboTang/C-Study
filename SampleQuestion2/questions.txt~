@@ -47,7 +47,3 @@ To fix that is do nothing:
 
 What purpose do constructor initialization lists serve?
 
-	In the constructor without initialization list, x,y are first constructed (all non-POD variables are constructed before the constructor code is executed), and then the AOs are executed, which may first free the resourcese that were allocated before, which is wasteful.
-
-	With initialization list, x,y are copy-constructed, which is usually faster
-
