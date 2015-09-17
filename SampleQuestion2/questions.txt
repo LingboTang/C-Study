@@ -65,3 +65,44 @@ int main()
 	X c,d;
 	Y e,f;
 }
+
+
+struct X
+{
+	int a; // POD
+	Y y; //Constructor
+	Z *p; // pointer to non-shared Z variable
+	
+	//Constructor
+	X()
+	{ a = 0; p = new Z;}
+	
+	//CC
+	X(const X &rhs):
+		a(rhs.a),
+		y(rhs.y)
+	{
+		if (!rhs.p) {
+			p = 0;
+			return;
+		}
+		return;
+	}
+	
+	//AO
+		a = rhs.a;
+		y = rhs.y;
+		
+		if (!rhs.p) {
+			delete p;
+			p = 0;
+			return *this;
+		}
+		
+		if (!p) {
+			p = new Z(*rhs.p)
+		} else {
+			p = new Z;
+		}
+		return *this;
+}
