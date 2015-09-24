@@ -1,0 +1,216 @@
+What is the purpose of class inheritance?
+
+	OO Programming Paradigm
+	Derive new class from existing base-class(es)
+	Inherits data members and methods from base-class(es)
+
+		* Code/data reuse
+		* Code adaption
+			-either keep base-class implementation
+			-or override it with new functionality
+
+Explain the circle-ellipse problem.
+
+	Mathematical set inclusion doesn;t imply a "is-a" relation in the software-engineering sense, whereby base-class methods must be implemented by all derived classes and objects keep their identity.
+
+	strechX will be applicable to ellipses, it could distort circles become ellipses, # lose their identity.
+
+What do derived classes inherit?
+	
+	A derived class inherits all data members and methods from base-class(es)
+
+What is public inheritance and protected inheritance?
+
+	is an
+
+	Public inheritance let sub-class access public and protected members of super class, but cannot access private members of X
+
+	is-implemented-in-terms-of
+
+	Protected inheritance let public members of super class become protected in sub class.
+	Users of sub class will not have access to any X components.
+
+How is sub-class data laid out?
+
+	When using single inheritance (one base-class) data members are added at the end of the base-class data.
+	Super-class part in sub-class objects is stored at the same addresse relative to the first byte of the object.
+
+
+
+Explain object slicing.
+
+	class Y : public X {...};
+	
+	X a;
+	Y b;
+
+	X AO is called with reference to b
+	X part of b is copied to a, Y part is not.
+	We are losing information.
+
+	Then b = a; is invalid.
+
+
+How can base-class copy constructors and assignment operators be invoked explicitely?
+When are base-class constructors and destructors called automatically?
+
+
+	Derived class constructor calls the base-class constructor first to initialize base-class members
+
+	If ommitted, the default derived class constructor calls the base-class constructor and other non-POD members in Y are constructed.
+
+
+	class X{
+		public:
+		X(int a_ = 0 ) {...}
+	};
+
+
+	class Y : public X
+	{
+		public:
+		Y() {/*X() is called here*/}
+		Y(int b ) : X(b) {...}  // explicit X(int) call
+	};
+
+	struct X {
+		X() {p = new int[100];}
+		~X() {delete [] p;}
+		int *p;
+	}
+
+	struct Y : public X
+	{
+		Y() {/*X() called here*/ q = new int[200];}
+		~Y() {delete[] q; /*~X() called here*/}
+		int *q;
+	};
+
+
+	struct X 
+	{
+		X() {x = 0;}
+		int x;
+	}
+
+	struct Y
+	{
+		Y() {y= 0;}
+		
+		Y(const Y &rhs)
+			: X(rhs), y(rhs.y)
+		{
+			// --base-class name
+		}
+	
+
+
+		Y & operator = (const Y &rhs)
+		{	
+			if (&rhs == this) return *this;
+			X::operator = (rhs);
+			y = rhs.y;
+			return *this;
+		}
+
+		int y;
+	};
+	
+	X a, *pa;
+	Y b;
+
+
+
+Describe the purpose of virtual functions and how they are invoked.
+
+	Goal: given a base-class pointer, execute member functions in the current object context:
+		Shape *p = new Circle;
+		p->draw();
+		Shape *q = new Rectangle;
+		q->draw();
+
+
+	class Shape
+	{
+		public:
+			int color;
+		
+		virtual void draw (Screen *s) const = 0;
+		virtual float area const = 0;
+	};
+	
+	class Circle : pulic Shape
+	{
+		public:
+		
+			void draw (Screen *s) const {...}
+	
+	
+	};
+
+	Key word virtual indicates that the methods in sub-classes is accessible 	via base-class pointers.
+
+
+	No type_id, no switch. Faster and easy to maintain.
+
+
+
+	class Graphics
+	{
+		public:
+			void draw() {
+				for (int i =0; i<n_objs; ++i) {
+					objs[i]->draw(screen);
+				}
+			}
+			Shape *objs[];
+			int n_objs;
+			Screen *screen;
+	}
+
+
+	
+
+What is a virtual function table?
+
+	Points to a block of memory that contains information about the class type including a table of virtual function addresses.
+	
+How can functions be called by means of function pointers?
+	When calling p->draw(screen);
+	the runtime system looks up the function to call from the VFT accessible via p. 
+
+	This allows us to iterate through the Shape* array and call the right draw function for each actual shape in turn.
+
+	 (* (p->vftp[0]))(p, screen)
+
+	// calls a function given a pointer to it, and p is passed as "this"
+
+
+	
+Name virtual function overheads and their advantages.
+
+	space (one more pointer per object, and one VFT per class)
+	time (table access, indirect function call)
+	
+	Because using virtual function creates runtime costs it is an optional feature in C++.
+
+
+	simplifies code, extensible design
+
+	code independent of number of classes in the system, can be put in library.
+
+
+
+Why do we need virtual destructors in case at least one other method is virtual?
+
+	calls ~X(), but not ~Y(). PROBLEM if Y has allocated resources (not relaesed)
+	In the presence of other virtual member functions.
+
+
+
+
+Is it a good idea to call virtual functions in constructors? Explain.
+
+	NO! Virtual function calls in base-class constructors call base-class functions! Derived class functions can't be called this way, because the derived class object hasn't been fully constructed yet.
+
+
