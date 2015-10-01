@@ -1,0 +1,12 @@
+1.
+
+Static_cast: Used for standard (numerical) conversions No run-time check
+
+
+reinterpret_cast: Conversion from one pointer type to any other pointer type
+
+const_cast:	 toggles status: const <-> non-const
+
+dynamic_cast: Used for "walking up and down the type hierarchy"
+
+
