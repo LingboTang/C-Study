@@ -1,6 +1,7 @@
-1.
+1. Using C++ type casts, write a function that reverses the byte order of an int variable.
+		See ReverseByte.cpp
 
-Static_cast: Used for standard (numerical) conversions No run-time check
+2. Static_cast: Used for standard (numerical) conversions No run-time check
 
 
 reinterpret_cast: Conversion from one pointer type to any other pointer type
@@ -9,4 +10,54 @@ const_cast:	 toggles status: const <-> non-const
 
 dynamic_cast: Used for "walking up and down the type hierarchy"
 
+				Is a non-trivial run-time check, which may slow down your program
+
+				For it to work, the source type must be polymorphic
+
+	
+3. What are static variables defined outside any class definitions and functions?
+
+	Helper function local to a certain file, protect it from other files access
+
+4. What is the purpose of static class variables?
+	
+	persistent global variable constructed when defined function first executed.
+	
+	Thread-safe, can let multiple execution threads call simultaneously
+
+
+5. What is the lifetime of static variables defined in functions?
+
+	Constructed during the first call, reused thereafter,
+	Destroyed in reverse order of their construction.
+
+6. How can you enforce initializing order of global variables?
+	
+	Wrap global objects in access functions like so.
+	Given that in Namespace
+
+7. Explain the concept of operator overloading.
+	
+	Made the operators generic, then when you use those operator,
+	there's no difference between built-in types and class types-
+	we want to be able to define what operators do when applied to 
+	our own classes.
+
+8. Define operator arity, associativity, and precedence.
+
+	arity: How many parameters the operators use
+	associativity: Left or Right first?
+	precedence: which operator get's evaluated first
+
+9. What is the effect of the following code: int a, *p, *q; ... a = *p++ - *--q;
+
+	Define an int value a, allocate 4 bytes of int to a tmp register
+	Define an int pointer p, allocate the 4 bytes address to the tmp register
+	Define an int pointer q, allocate the 4 bytes address to the tmp register
+
+	*p++ means *(p++), *--q means *(q--)
+	Therefore, a= *p++ - *q-- means, evaluate a to be substraction between the address of p+1
+	and q-1
+
+10.
 
