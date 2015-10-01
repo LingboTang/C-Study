@@ -59,5 +59,53 @@ dynamic_cast: Used for "walking up and down the type hierarchy"
 	Therefore, a= *p++ - *q-- means, evaluate a to be substraction between the address of p+1
 	and q-1
 
-10.
+10. What is the difference between global operators and class operators?
 
+	Global operators: Operator overloaded member function gets invoked on the first operand.
+
+	Class operators:Can be considered methods that are invoked when the lhs of binary operation is an object and the rhs is another object or POD, or when the argument of a unary operator is an object. The compiler internally rewrites operators into member function calls.
+
+	
+11. Why does the vector implementation require const and non-const versions of operator[] ?
+
+
+	const: member is protected, will not be changed by call
+	non_const: returns reference so that elements can be changed
+
+	return a[0], only works if const definition is provided for V[].
+
+
+
+12. What is the difference between the prefix ++ and postfix ++ operators?
+
+	For number types, both increment i, but the VALUE of both expressions is differnt
+	the value of ++i is the REFERENCE  to the variable
+	the value of i++ is the VALUE of the variable BEFORE increment
+	
+13. How to enforce evaluation order? Give two examples.
+	
+	Complex &operator++()
+	{
+		++re;
+		return *this;
+	}
+	
+	Complex operator++(int)
+	{
+		Complex ret(*this);
+		
+		++re;
+	
+		return ret;
+	}
+
+
+14. Why is it a bad idea to overload global operator&&(int, int) ?
+
+
+	Because this certainly will confuse readers of your code.
+	
+	Recall that & takes the address of a variable, && and || are 
+	Boolean short-cut operators, and, is the sequence operator.
+	Imagine what happens when a "clever" team member changes the meaning
+	of those operators
