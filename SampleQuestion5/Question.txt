@@ -1,0 +1,146 @@
+1. What is the purpose of template functions? Give an example
+
+	Because we need generic programming:
+		Implement once and reuse code for arbitrary types
+		Code is easier to maintain
+		There's no need for defining long list of identical functions.
+
+	template <typename T> T min(T a, T b)
+	{
+		return a<b ? a:b;
+	}
+
+2. Assuming swap is the template function defined in the notes, what does exactly happen when the compiler sees this code ?
+	
+	int x,y;
+	swap(x,y);
+
+
+	template <typename T> void swap(T &a, T &b)
+	{
+		T temp(a); a=b; b=temp;
+	}
+
+3. What is the purpose of class templates? Give an example
+
+	Reuse type independent code
+	Classes are parameterized by types
+
+	template <typenmae T> class X
+	{
+		T can be used here...
+	}
+
+4. List some advantages of template functions over macros.
+	
+	Template functions are type-aware, macros are not
+	Template funcitons can be specialized easily, macros cannot
+	Inlined template functions are as fast as macro-generated-code
+	No "unwanted" side-effects with template functions
+	Macro parameters may be evaluate more than once which can cause
+	trouble
+
+5. Assuming Stack is a class template which takes one type parameter, what exactly happens when the compiler sees this code?
+	
+	Stack<double> foo;
+	
+	template <typename T> class Stack
+	{
+	public:
+		Stack();
+		~Stack();
+	
+		void push_back(T &v) {}
+		T &back() {}
+		void pop_back() {}
+		bool empty() const {}
+
+	private:
+		T *p
+		int size;
+	}
+
+	Stack<int> si;
+	Stack<float> sf;
+	
+	si.push_back(5);
+	cout << si.back();
+	if (si.empty()) exit(0);
+	sf.push_back(3.5);
+
+
+6. How can POD variables be initialized with 0 in template code?
+
+	Must call constuctor explicitely:
+	
+	template <typename T> void foo()
+	{
+		T x = T(); // POD is initialized with 0
+			   // T x; leaves x uninitialized for
+			   // POD types t...
+	};
+	
+	template <typename T> class X
+	{
+	public:
+		X() : a() {} //this also works for POD T
+	private:
+		T a;
+	};
+
+	Above initialization works for all POD types, including structs,
+	not just for template class variables, but also for arrays:
+		int *p= new int[100]();
+	initializes all values with 0.
+
+7. Describe the purpose of template specialization and partial template specialization. Give one example for each.
+
+	A customized vector<bool> class template could store 8 bits in a byte instead.
+
+	Adapts class templates to special needs. There is no relation between above implementations -- except for the same class template name X!
+
+	--> different code for different types.
+
+	template <typaname T> class X {...};
+	template <> class X<bool> {...};
+	template <> class X<int> {...};
+
+	X<float> x;
+	X<bool> x;
+	X<int> x;
+
+8. What is the purpose of type traits?
+
+	We sometimes want to know something about types at compile time,
+	to create faster code, for instance.
+
+	For this, we need to infer type properties at compile time, a process
+	known as compile time type reflection.
+
+	For example, POD types can be copied with memcpy, but others can't
+	
+	A smart copy method could take advantage of this fact.
+
+	Refresher: The code that follows makes use of enumeration types, which define in the program.
+
+
+9. Implement class template is_pointer<T> for which is_pointer<T>::value is 1 if type T is a pointer and 0 otherwise. Also explain how your code works.
+
+	template <typename T> struct TypeTraits
+	{
+		template <typename U> struct PointerTraits
+		{
+			enum{value = 0}; //no pointer
+		};
+
+		template <typename U> struct PointerTraits<U*>
+		{
+			enum{value =1}; //is pointer
+		};
+
+		enum {is_pointer = PointerTraits<T>::value};
+		
+		enum{ is_reference = ...};
+		enum{ is_const = ...};
+		enum{ has_trivial_assign=...}; // bit-wise copy OK?
+	};

@@ -102,3 +102,10 @@ dynamic_cast: Used for "walking up and down the type hierarchy"
 
 14. Why is it a bad idea to overload global operator&&(int, int) ?
 
+
+	Because this certainly will confuse readers of your code.
+	
+	Recall that & takes the address of a variable, && and || are 
+	Boolean short-cut operators, and, is the sequence operator.
+	Imagine what happens when a "clever" team member changes the meaning
+	of those operators

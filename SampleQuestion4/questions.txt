@@ -84,21 +84,11 @@ dynamic_cast: Used for "walking up and down the type hierarchy"
 	
 13. How to enforce evaluation order? Give two examples.
 	
-	Complex &operator++()
-	{
-		++re;
-		return *this;
-	}
+	x = x / ++x; => y=x; x = y/ ++x
 	
-	Complex operator++(int)
-	{
-		Complex ret(*this);
-		
-		++re;
+	y = f() + g(); (if f and g access global variables things can get tricky)
 	
-		return ret;
-	}
-
+	=> x=f(); y = x+g();
 
 14. Why is it a bad idea to overload global operator&&(int, int) ?
 
