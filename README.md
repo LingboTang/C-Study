@@ -4,3 +4,9 @@ C++ is considered as the most sophisticated and complicated language in the worl
 
 I heard a lot the people told me that you need at least 10 years' professional working experience in C++
 to claim that you know C++, which I wouldn't deny. But I would still like to share my procedures of studying C++. 
+
+
+I will add some intermediate samples including boost. smart pointer, lambda expression, const expression after Christmas.
+
+Merry Christmas!
+
