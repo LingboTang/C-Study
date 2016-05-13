@@ -65,4 +65,5 @@ void RBtree::insert()
 		else
 			q->left =t;
 	}
+	insertfix(t);
 }
