@@ -67,3 +67,69 @@ void RBtree::insert()
 	}
 	insertfix(t);
 }
+
+void RBtree::insertfix(node* t)
+{
+	node *u;
+	if (root == t)
+	{
+		t->color = 'b';
+		return;
+	}
+
+	while(t->parent!=NULL && t->parent->color == 'r')
+	{
+		node *g=t->parent->parent;
+		if (g->left == t->parent)
+		{
+			if (g->right!=NULL)
+			{
+				u=g->right;
+				if (u->color=='r')
+				{
+					t->parent->color='b';
+					u->color ='b';
+					g->color ='r';
+					t=g;
+				}
+			}
+			else
+			{
+				if(t->parent->right==t)
+				{
+					t = t->parent;
+					leftrotate(t);
+				}
+				t->parent->color='b';
+				g->color='r';
+				rightrotate(g);
+			}
+		}
+		else
+		{
+			if (g->left!=NULL)
+			{
+				U=g->left;
+				if (u->color =='r')
+				{
+					t->parent->color = 'b';
+					u->color='b';
+					g->color='r';
+					t = g;
+				}
+			}
+			else
+			{
+				if (t->parent->left == t)
+				{
+					t=t->parent;
+					rightrotate(t);
+				}
+				t->parent->color ='b';
+				g->color = 'r';
+				leftrotate(g);
+			}
+		}
+		root->color='b';
+	}
+}
