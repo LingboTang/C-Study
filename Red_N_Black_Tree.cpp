@@ -133,3 +133,6 @@ void RBtree::insertfix(node* t)
 		root->color='b';
 	}
 }
+
+void RBtree::leftrotate(node* t)
+{}
